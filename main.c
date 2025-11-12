@@ -6,49 +6,114 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 18:29:43 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/11 17:02:54 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/12 04:53:42 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int   key_esc(int keycode, void *param)
+void    ft_error(char *error)
 {
-   (void)param;
-   if(keycode == 65307)
-   {
-      printf("Exit");
-      exit(0);
-   }
-   return (1);
-}
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
-   if (x < 0 || y < 0 || x >= 1920 || y >= 1080)
-		return ;
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+    printf("Error\n%s\n", error);
+    exit(1);
 }
 
-int main(void)
+
+char	*ft_strdup(const char *s)
 {
-   void   *mlx;
-   void  *mlx_win;
-   t_data   img;
-   
-   mlx = mlx_init();
-      if(!mlx)
-      {
-	   	write(1, "Window creation failed!\n", 25);
-		   return (1);
-	   }
-   mlx_win = mlx_new_window(mlx, 1920, 1080, "Window");
-   img.img = mlx_new_image(mlx, 1920, 1080);
-   mlx_key_hook(mlx_win, key_esc, NULL);
+	char	*p;
+	int		i;
+	int		len;
 
-   img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-								&img.endian);
+	len = ft_strlen(s);
+	i = 0;
+	p = (char *)malloc(sizeof(char) * (len + 1));
+	if (!p)
+		return (NULL);
+	while (s[i])
+	{
+		p[i] = s[i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}
+void check_rectangle(char **map)
+{
+    int i;
+    size_t ref;
 
-   mlx_loop(mlx);
+    ref = ft_strlen(map[0]);
+    i = -1;
+    while (map[++i])
+        if (ref != ft_strlen(map[i]))
+            ft_error("Map is not rectangle");
+    
+}
+
+int get_size_of_map(char *map_name)
+{
+    int i;
+    int fd;
+    char    *line;
+
+    fd = open(map_name, O_RDONLY);
+    i = 0;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        ++i;
+        free(line);
+    }
+    close(fd);
+    return i;
+}
+
+void    get_map(char *map_name, t_game *game)
+{
+    int i;
+    int fd;
+    char    *line;
+    int     map_size;
+
+    i = -1;
+    fd = open(map_name, O_RDONLY);
+    map_size = get_size_of_map(map_name);
+    game->map->map = malloc(sizeof(char *) * (map_size + 1));
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        game->map->map[++i] = ft_strdup(line);
+        free(line);
+    }
+    game->map->map[i] = NULL;
+    game->map->y_size = i;
+    game->map->x_size = ft_strlen(game->map->map[0]);
+    close(fd);
+}
+void    check_map(t_game *game, char *map_name)
+{
+    get_map(map_name, game);
+    check_rectangle(game->map->map);
+}
+
+int	main(int argc, char *argv[])
+{
+    t_game  *game;
+
+    //int x = 0;
+    //int y = 0;
+
+    if (argc != 2)
+        exit(1);   
+    game = malloc(sizeof(t_game));
+    game->map = malloc(sizeof(t_map));
+    game->images = NULL;
+    check_map(game,argv[1]);
+	game->mlx = mlx_init();
+	game->win = mlx_new_window(game->mlx, game->map->x_size * 50, game->map->y_size * 50, "so_long");
+	load_images(game);
+    render_map(game);
+    mlx_hook(game->win, 2, 1L << 0, key_esc, game);
+	mlx_hook(game->win, 17, 0, close_window, game);
+	mlx_loop(game->mlx);
+	return (0);
 }
