@@ -6,7 +6,7 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 18:29:43 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/12 04:53:42 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/12 05:59:22 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ void    get_map(char *map_name, t_game *game)
     char    *line;
     int     map_size;
 
-    i = -1;
+    i = 0;
     fd = open(map_name, O_RDONLY);
     map_size = get_size_of_map(map_name);
     game->map->map = malloc(sizeof(char *) * (map_size + 1));
     while ((line = get_next_line(fd)) != NULL)
     {
-        game->map->map[++i] = ft_strdup(line);
+        game->map->map[i] = ft_strdup(line);
         free(line);
+        i++;
     }
     game->map->map[i] = NULL;
     game->map->y_size = i;
