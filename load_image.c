@@ -6,7 +6,7 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 04:51:32 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/12 06:18:28 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/21 00:51:08 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,36 @@ void load_images(t_game *game)
 
     game->images = malloc(sizeof(t_images));
     if (!game->images)
-        ft_error("Image malloc failed");
-    game->images->wall = mlx_xpm_file_to_image(game->mlx, "textures/grass.xpm", &width, &height);
+        ft_error(game, "Image malloc failed");
+    game->images->wall = mlx_xpm_file_to_image(game->mlx, "textures/wall.xpm", &width, &height);
     if (!game->images->wall)
-        ft_error("Failed to load wall.xpm");
+        ft_error(game, "Failed to load wall.xpm");
     game->images->empty = mlx_xpm_file_to_image(game->mlx, "textures/empty.xpm", &width, &height);
-    if (!game->images->wall)
-        ft_error("Failed to load empty.xpm");
+    if (!game->images->empty)
+        ft_error(game, "Failed to load empty.xpm");
     game->images->coin = mlx_xpm_file_to_image(game->mlx, "textures/collectible.xpm", &width, &height);
-    if (!game->images->wall)
-        ft_error("Failed to load coin.xpm");
+    if (!game->images->coin)
+        ft_error(game, "Failed to load coin.xpm");
     game->images->character = mlx_xpm_file_to_image(game->mlx, "textures/character.xpm", &width, &height);
-    if (!game->images->wall)
-        ft_error("Failed to load character.xpm");
+    if (!game->images->character)
+        ft_error(game, "Failed to load character.xpm");
+    game->images->exit = mlx_xpm_file_to_image(game->mlx, "textures/exit.xpm", &width, &height);
+    if (!game->images->exit)
+        ft_error(game, "Failed to load exit.xpm");
 }
 
-void render_map(t_game *game)
+void  render_map(t_game *game)
 {
     int y = 0;
     int x = 0;
     int tile_size = 50;
 
-    printf("x: %d, y: %d\n",game->player_x, game->player_y);
     while (y < game->map->y_size)
     {
         x = 0;
         while (x < game->map->x_size)
         {
-            if (game->map->map[y][x] == '1')
+             if (game->map->map[y][x] == '1')
                 mlx_put_image_to_window(game->mlx, game->win,
                     game->images->wall, x * tile_size, y * tile_size);
             if (game->map->map[y][x] == '0')
@@ -54,6 +56,9 @@ void render_map(t_game *game)
             if (game->map->map[y][x] == 'C')
                 mlx_put_image_to_window(game->mlx, game->win,
                     game->images->coin, x * tile_size, y * tile_size);
+             if (game->map->map[y][x] == 'E')
+                mlx_put_image_to_window(game->mlx, game->win,
+                    game->images->exit, x * tile_size, y * tile_size);
             if (game->map->map[y][x] == 'P')
             {
                 mlx_put_image_to_window(game->mlx, game->win,

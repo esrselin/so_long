@@ -6,7 +6,8 @@ MLX         = $(MLX_DIR)/libmlx.a
 
 LDFLAGS     = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
-SRCS        = main.c key_press.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c load_image.c
+SRCS        = main.c key_press.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c load_image.c\
+				name_check.c so_long_utils.c flood_fill.c map_validation.c free_game.c
 OBJS        = $(SRCS:.c=.o)
 
 all: $(MLX) $(NAME)

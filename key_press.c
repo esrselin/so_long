@@ -6,24 +6,32 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:01:54 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/12 06:17:21 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/21 00:52:03 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-// void    
-
 
 void steps(t_game *game, int i, int j)
 {
 	if (game->map->map[game->player_y + i][game->player_x + j] == '0' 
 		|| game->map->map[game->player_y + i][game->player_x + j] == 'C')
 	{
+        if(game->map->map[game->player_y + i][game->player_x + j] == 'C')
+            game->collectible_count--;
 		game->map->map[game->player_y + i][game->player_x + j] = 'P';
 		game->map->map[game->player_y][game->player_x] = '0';
 		refresh_screen(game);
 	}
+    else if (game->map->map[game->player_y + i][game->player_x + j] == 'E'
+        && game->collectible_count == 0)
+    {
+        game->map->map[game->player_y + i][game->player_x + j] = 'P';
+		game->map->map[game->player_y][game->player_x] = '0';
+        ft_free_game(game);
+        write(1,"Game Over!", 10);
+        exit(1);
+    }
 }
 
 
@@ -33,7 +41,7 @@ int key_esc(int keycode, void *param)
     if (keycode == 65307)
     {
         write(1, "Exit with ESC\n", 14);
-        free(game);
+        ft_free_game(game);
         exit(0);
     }
     else if (keycode == KEY_UP)
@@ -51,7 +59,7 @@ int close_window(void *param)
 {
     t_game *game = (t_game *)param;
     write(1, "Window Closed\n", 15);
-    free(game);
+    ft_free_game(game);
     exit(0);
     return (0);
 }
