@@ -6,7 +6,7 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 04:51:32 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/21 00:51:08 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/23 20:18:56 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,9 @@ void load_images(t_game *game)
         ft_error(game, "Failed to load exit.xpm");
 }
 
-void  render_map(t_game *game)
+void  render_map(t_game *game, int x, int y, int tile_size)
 {
-    int y = 0;
-    int x = 0;
-    int tile_size = 50;
-
+    
     while (y < game->map->y_size)
     {
         x = 0;
@@ -70,6 +67,7 @@ void  render_map(t_game *game)
         }
         y++;
     }
+    printf("Moves: %d\n", game->move_count);
 }
 
 void    refresh_screen(t_game *game)

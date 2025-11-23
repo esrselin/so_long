@@ -6,7 +6,7 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 22:20:07 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/21 00:12:41 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/23 20:18:29 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_map
     int     x_size;
     int     y_size;
     int     c_count;
-
+    
 }t_map;
 
 
@@ -53,6 +53,9 @@ typedef struct s_game
     int     player_x;
     int     player_y;
     int     collectible_count;
+    int     exit_count;
+    int     move_count;
+    int     player_count;
     t_images *images;
     t_map   *map;
 }t_game;
@@ -64,15 +67,15 @@ void	free_map(t_map *map);
 void	free_images(t_game *game);
 void	destroy_mlx(t_game *game);
 void	free_game(t_game *game);
-void render_map(t_game *game);
+void  render_map(t_game *game, int x, int y, int tile_size);
 void load_images(t_game *game);
 void	ft_error(t_game *game, char *msg);
 int     has_ber_extension(char *filename);
 char	*ft_strdup(const char *s);
-//int	ft_strncmp(const char *s1, const char *s2, size_t n);
-void	check_map_reachable(t_game *game);
-void map_check(t_game *game);
+void	check_map_reachable(t_game *game, int y, int x, int collected);
+void map_check(t_game *game, int i, int j, char *keys);
 void ft_free_game(t_game *game);
 void check_walls(t_game *game);
+void	game_init(t_game **game);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:01:54 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/21 00:52:03 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/23 19:40:28 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void steps(t_game *game, int i, int j)
             game->collectible_count--;
 		game->map->map[game->player_y + i][game->player_x + j] = 'P';
 		game->map->map[game->player_y][game->player_x] = '0';
+        game->move_count++;
 		refresh_screen(game);
 	}
     else if (game->map->map[game->player_y + i][game->player_x + j] == 'E'
@@ -29,7 +30,7 @@ void steps(t_game *game, int i, int j)
         game->map->map[game->player_y + i][game->player_x + j] = 'P';
 		game->map->map[game->player_y][game->player_x] = '0';
         ft_free_game(game);
-        write(1,"Game Over!", 10);
+        write(1,"You Win!\n", 10);
         exit(1);
     }
 }

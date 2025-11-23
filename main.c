@@ -48,12 +48,25 @@ void	get_map(char *map_name, t_game *game)
 	fd = open(map_name, O_RDONLY);
 	if (fd == -1)
 		ft_error(game, "Cannot open map file");
+
 	game->collectible_count = 0;
 	game->map->map = malloc(sizeof(char *) * (get_map_height(game, map_name) + 1));
 	if (!game->map->map)
 		ft_error(game, "Malloc failed");
+
 	while ((line = get_next_line(fd)))
 	{
+		if (line[0] == '\n' || line[0] == '\0')
+		{
+			free(line);
+			continue;
+		}
+		if (i > 0 && ft_strlen(line) == 1 && line[0] == '\n')
+		{
+			free(line);
+			ft_error(game, "Map contains an empty line inside");
+		}
+
 		j = 0;
 		while (line[j])
 		{
@@ -70,11 +83,13 @@ void	get_map(char *map_name, t_game *game)
 		free(line);
 		i++;
 	}
+
 	game->map->map[i] = NULL;
 	game->map->y_size = i;
 	game->map->x_size = ft_strlen(game->map->map[0]);
 	close(fd);
 }
+
 
 void	check_rectangle(t_game *game, char **map)
 {
@@ -88,7 +103,6 @@ void	check_rectangle(t_game *game, char **map)
 		i++;
 	}
 }
-
 int	main(int argc, char **argv)
 {
 	t_game	*game;
@@ -98,39 +112,19 @@ int	main(int argc, char **argv)
 		ft_error(game, "Usage: ./so_long maps/map.ber");
 	if (!has_ber_extension(argv[1]))
 		ft_error(game, "Map must have .ber extension");
-
-	game = malloc(sizeof(t_game));
-	if (!game)
-	{	
-		ft_error(game, "Malloc failed");
-		free(game);
-	}	
-	game->map = malloc(sizeof(t_map));
-	if (!game->map)
-	{
-		ft_error(game, "Malloc failed");
-		
-	}
-	game->images = NULL;
-	game->collectible_count = 0;
-
+	game_init(&game);
 	get_map(argv[1], game);
-    
 	check_rectangle(game, game->map->map);
 	check_walls(game);
-	check_map_reachable(game);
-	map_check(game);
+	check_map_reachable(game, -1, 0, -1);
+	map_check(game, -1, -1, "10CPE");
 	game->mlx = mlx_init();
-	game->win = mlx_new_window(game->mlx,
-		game->map->x_size * 50,
-		game->map->y_size * 50,
-		"so_long");
-
+	game->win = mlx_new_window(game->mlx, game->map->x_size * 50, game->map->y_size * 50, "so_long");
 	load_images(game);
-	render_map(game);
-
+	render_map(game,0,0,50);
 	mlx_hook(game->win, 2, 1L << 0, key_esc, game);
 	mlx_hook(game->win, 17, 0, close_window, game);
 	mlx_loop(game->mlx);
 	return (0);
 }
+

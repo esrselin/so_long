@@ -34,12 +34,12 @@ static char	**create_map_copy(t_game *game)
 
 	copy = malloc(sizeof(char *) * (game->map->y_size + 1));
 	if (!copy)
-		ft_error(game, "Error\nMalloc failed (map copy)");
+		ft_error(game, "Malloc failed");
 	while (i < game->map->y_size)
 	{
 		copy[i] = ft_strdup(game->map->map[i]);
 		if (!copy[i])
-			ft_error(game, "Error\nft_strdup failed (map copy)");
+			ft_error(game, "ft_strdup failed");
 		i++;
 	}
 	copy[i] = NULL;
@@ -54,12 +54,9 @@ static void	free_map_copy(char **copy)
 	free(copy);
 }
 
-void	check_map_reachable(t_game *game)
+void	check_map_reachable(t_game *game, int y, int x, int collected)
 {
 	char	**copy;
-	int		y;
-	int		x;
-	int		collected = 0;
 
 	copy = create_map_copy(game);
 	ft_flood(copy, game->player_y, game->player_x, game);
@@ -72,12 +69,12 @@ void	check_map_reachable(t_game *game)
 			if (copy[y][x] == 'C')
 			{
 				free_map_copy(copy);
-				ft_error(game, "Error\nCollectible is not reachable!");
+				ft_error(game, "Collectible is not reachable!");
 			}
 			if (copy[y][x] == 'E')
 			{
 				free_map_copy(copy);
-				ft_error(game, "Error\nExit is not reachable!");
+				ft_error(game, "Exit is not reachable!");
 			}
 			if (game->map->map[y][x] == 'C' && copy[y][x] == 'M')
 				collected++;
