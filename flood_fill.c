@@ -66,12 +66,24 @@ void	check_map_reachable(t_game *game, int y, int x, int collected)
 	(void)collected;
 	copy = create_map_copy(game);
 	ft_flood(copy, game->player_y, game->player_x, game);
+	while (copy[++y])
+	{
+		printf("%s\n", copy[y]);
+	}
+	
 	y = -1;
 	while (++y < game->map->y_size)
 	{
 		x = -1;
 		while (copy[y][++x])
 		{
+			printf("%d,%d\n", y, x);
+			printf("%c \n", copy[y][x]);
+			if (copy[y][x] == 'P')
+			{
+				free_map_copy(copy);
+				ft_error(game, "Player is not reachable!");
+			}
 			if (copy[y][x] == 'C')
 			{
 				free_map_copy(copy);

@@ -81,7 +81,10 @@ void	check_map_reachable(t_game *game, int y, int x, int collected);
 void	ft_error(t_game *game, char *msg);
 int		has_ber_extension(char *filename);
 char	*ft_strdup(const char *s);
-
+char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strrchr(const char *s, int c);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strdup(const char *s);
 void	get_map(char *map_name, t_game *game);
 void	check_rectangle(t_game *game, char **map);
 

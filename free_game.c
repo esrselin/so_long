@@ -26,7 +26,7 @@ void	ft_free_map(t_game *game)
 	int	i;
 
 	i = 0;
-	if(!game->map)
+	if (!game->map)
 		return ;
 	if (!game->map->map)
 	{
