@@ -40,26 +40,28 @@ static char	*read_line(int fd, char *line)
 
 static char	*set_line(char *line)
 {
-	char	*tmp_line;
-	size_t	i;
-	size_t	j;
+    char	*tmp_line;
+    size_t	i;
+    size_t	j;
 
-	if (!line || line[0] == '\0')
-		return (NULL);
-	i = 0;
-	while (line[i] && line[i] != '\n')
-		i++;
-	tmp_line = malloc(sizeof(char) * (i + 1));
-	if (!tmp_line)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		tmp_line[j] = line[j];
-		j++;
-	}
-	tmp_line[j] = '\0';
-	return (tmp_line);
+    if (!line || line[0] == '\0')
+        return (NULL);
+    i = 0;
+    while (line[i] && line[i] != '\n')
+        i++;
+    if (i == 0)
+        return (NULL);
+    tmp_line = malloc(sizeof(char) * (i + 1));
+    if (!tmp_line)
+        return (NULL);
+    j = 0;
+    while (j < i)
+    {
+        tmp_line[j] = line[j];
+        j++;
+    }
+    tmp_line[j] = '\0';
+    return (tmp_line);
 }
 
 static char	*clean_line(char *line)
@@ -93,15 +95,21 @@ static char	*clean_line(char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*line;
-	char		*tmp_line;
+    static char	*line;
+    char		*tmp_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	line = read_line(fd, line);
-	if (!line)
-		return (NULL);
-	tmp_line = set_line(line);
-	line = clean_line(line);
-	return (tmp_line);
+    if (fd < 0)
+    {
+        free(line);
+        line = NULL;
+        return (NULL);
+    }
+    if (BUFFER_SIZE <= 0)
+        return (NULL);
+    line = read_line(fd, line);
+    if (!line)
+        return (NULL);
+    tmp_line = set_line(line);
+    line = clean_line(line);
+    return (tmp_line);
 }

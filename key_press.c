@@ -6,61 +6,65 @@
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:01:54 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/23 19:40:28 by esakgul          ###   ########.fr       */
+/*   Updated: 2025/11/28 17:06:21 by esakgul          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void steps(t_game *game, int i, int j)
+void	steps(t_game *game, int i, int j)
 {
-	if (game->map->map[game->player_y + i][game->player_x + j] == '0' 
-		|| game->map->map[game->player_y + i][game->player_x + j] == 'C')
+	char	next;
+
+	next = game->map->map[game->player_y + i][game->player_x + j];
+	if (next == '0' || next == 'C')
 	{
-        if(game->map->map[game->player_y + i][game->player_x + j] == 'C')
-            game->collectible_count--;
+		if (next == 'C')
+			game->collectible_count--;
 		game->map->map[game->player_y + i][game->player_x + j] = 'P';
 		game->map->map[game->player_y][game->player_x] = '0';
-        game->move_count++;
+		game->move_count++;
 		refresh_screen(game);
 	}
-    else if (game->map->map[game->player_y + i][game->player_x + j] == 'E'
-        && game->collectible_count == 0)
-    {
-        game->map->map[game->player_y + i][game->player_x + j] = 'P';
+	else if (next == 'E' && game->collectible_count == 0)
+	{
+		game->map->map[game->player_y + i][game->player_x + j] = 'P';
 		game->map->map[game->player_y][game->player_x] = '0';
-        ft_free_game(game);
-        write(1,"You Win!\n", 10);
-        exit(1);
-    }
+		ft_free_game(game);
+		write(1, "You Win!\n", 9);
+		exit(0);
+	}
 }
 
-
-int key_esc(int keycode, void *param)
+int	key_esc(int keycode, void *param)
 {
-    t_game *game = (t_game *)param;
-    if (keycode == 65307)
-    {
-        write(1, "Exit with ESC\n", 14);
-        ft_free_game(game);
-        exit(0);
-    }
-    else if (keycode == KEY_UP)
-        steps(game,-1,0);
-    else if (keycode == KEY_LEFT)
-        steps(game,0,-1);
-    else if (keycode == KEY_DOWN)
-        steps(game,1,0);
-    else if (keycode == KEY_RIGHT)
-        steps(game,0,1);
-    return (0);
+	t_game	*game;
+
+	game = (t_game *)param;
+	if (keycode == 65307)
+	{
+		write(1, "Exit with ESC\n", 14);
+		ft_free_game(game);
+		exit(0);
+	}
+	if (keycode == KEY_UP)
+		steps(game, -1, 0);
+	else if (keycode == KEY_LEFT)
+		steps(game, 0, -1);
+	else if (keycode == KEY_DOWN)
+		steps(game, 1, 0);
+	else if (keycode == KEY_RIGHT)
+		steps(game, 0, 1);
+	return (0);
 }
 
-int close_window(void *param)
+int	close_window(void *param)
 {
-    t_game *game = (t_game *)param;
-    write(1, "Window Closed\n", 15);
-    ft_free_game(game);
-    exit(0);
-    return (0);
+	t_game	*game;
+
+	game = (t_game *)param;
+	write(1, "Window Closed\n", 14);
+	ft_free_game(game);
+	exit(0);
+	return (0);
 }

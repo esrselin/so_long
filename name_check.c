@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: esakgul <esakgul@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 17:14:59 by esakgul           #+#    #+#             */
-/*   Updated: 2025/11/19 19:41:22 by esakgul          ###   ########.fr       */
+/*   Created: 2025/11/19 17:14:59 by esakgul         #+#    #+#             */
+/*   Updated: 2025/11/28 17:19:00 by esakgul        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,42 @@ char	*ft_strrchr(const char *s, int c)
 
 	last = ft_strlen(s);
 	if ((char)c == '\0')
-		return ((char *)(s + last));
+		return ((char *)s + last);
 	while (last > 0)
 	{
 		if (s[last - 1] == (char)c)
-			return ((char *)(s + last - 1));
+			return ((char *)s + last - 1);
 		last--;
 	}
 	return (NULL);
 }
 
-int has_ber_extension(char *filename)
+int	has_ber_extension(char *filename)
 {
-    char *dot;
+	char	*dot;
 
-    dot = ft_strrchr(filename, '.'); 
-    if (!dot)
-        return (0);
-    return (ft_strncmp(dot, ".ber", 4) == 0);
+	dot = ft_strrchr(filename, '.');
+	if (!dot)
+		return (0);
+	return (ft_strncmp(dot, ".ber", 4) == 0);
 }
 
+char	*ft_strdup(const char *s)
+{
+	char	*tmp;
+	size_t	len;
+	size_t	i;
+
+	len = ft_strlen(s);
+	tmp = (char *)malloc(sizeof(char) * (len + 1));
+	if (!tmp)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		tmp[i] = s[i];
+		i++;
+	}
+	tmp[i] = '\0';
+	return (tmp);
+}
