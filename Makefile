@@ -12,7 +12,7 @@ LDFLAGS     = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -L$(PRINTF_DIR) -lftprintf
 
 SRCS        = main.c key_press.c get_next_line/get_next_line.c \
               get_next_line/get_next_line_utils.c load_image.c \
-              so_long_utils.c flood_fill.c all_validation.c read_map.c\
+              so_long_utils.c flood_fill.c flood_fill_check.c all_validation.c read_map.c\
               free_game.c
 
 OBJS        = $(SRCS:.c=.o)

@@ -57,33 +57,32 @@ void	check_walls(t_game *game)
 	i = -1;
 	while (++i < game->map->x_size)
 	{
-		if (game->map->map[0][i] != '1'
-			|| game->map->map[game->map->y_size - 1][i] != '1')
+		if (game->map->map[0][i] != '1' || game->map->map[game->map->y_size
+			- 1][i] != '1')
 			ft_error(game, "Map must be surrounded by walls");
 	}
 	i = -1;
 	while (++i < game->map->y_size)
 	{
-		if (game->map->map[i][0] != '1'
-			|| game->map->map[i][game->map->x_size - 1] != '1')
+		if (game->map->map[i][0] != '1' || game->map->map[i][game->map->x_size
+			- 1] != '1')
 			ft_error(game, "Map must be surrounded by walls");
 	}
 }
 
 void	check_rectangle(t_game *game, char **map)
 {
-    int		i;
-    size_t	len;
+	int		i;
+	size_t	len;
 
-    if (!map || !map[0])
-        return ;
-    i = 1;
-    len = ft_strlen(map[0]);
-    while (map[i] && map[i][0] != '\0')
-    {
-        if (ft_strlen(map[i]) != len)
-            ft_error(game, "Map is not rectangular");
-        i++;
-    }
+	if (!map || !map[0])
+		return ;
+	i = 1;
+	len = ft_strlen(map[0]);
+	while (map[i] && map[i][0] != '\0')
+	{
+		if (ft_strlen(map[i]) != len)
+			ft_error(game, "Map is not rectangular");
+		i++;
+	}
 }
-

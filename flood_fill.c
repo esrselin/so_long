@@ -14,8 +14,7 @@
 
 static void	ft_flood(char **map, int y, int x, t_game *game)
 {
-	if (y < 0 || x < 0 || y >= game->map->y_size
-		|| x >= game->map->x_size)
+	if (y < 0 || x < 0 || y >= game->map->y_size || x >= game->map->x_size)
 		return ;
 	if (map[y][x] == '1' || map[y][x] == 'M')
 		return ;
@@ -26,75 +25,70 @@ static void	ft_flood(char **map, int y, int x, t_game *game)
 	ft_flood(map, y, x - 1, game);
 }
 
-static char	**create_map_copy(t_game *game)
+static void	set_exit_as_wall(char **copy, t_game *game)
 {
-	char	**copy;
-	int		i;
+	int	y;
+	int	x;
 
-	i = 0;
-	copy = malloc(sizeof(char *) * (game->map->y_size + 1));
-	if (!copy)
-		ft_error(game, "Malloc failed");
-	while (i < game->map->y_size)
-	{
-		copy[i] = ft_strdup(game->map->map[i]);
-		if (!copy[i])
-			ft_error(game, "ft_strdup failed");
-		i++;
-	}
-	copy[i] = NULL;
-	return (copy);
-}
-
-static void	free_map_copy(char **copy)
-{
-	int	i;
-
-	i = 0;
-	while (copy[i])
-	{
-		free(copy[i]);
-		i++;
-	}
-	free(copy);
-}
-
-void	check_map_reachable(t_game *game, int y, int x, int collected)
-{
-	char	**copy;
-
-	(void)collected;
-	copy = create_map_copy(game);
-	ft_flood(copy, game->player_y, game->player_x, game);
-	while (copy[++y])
-	{
-		printf("%s\n", copy[y]);
-	}
-	
 	y = -1;
 	while (++y < game->map->y_size)
 	{
 		x = -1;
-		while (copy[y][++x])
+		while (++x < game->map->x_size)
 		{
-			printf("%d,%d\n", y, x);
-			printf("%c \n", copy[y][x]);
-			if (copy[y][x] == 'P')
-			{
-				free_map_copy(copy);
-				ft_error(game, "Player is not reachable!");
-			}
-			if (copy[y][x] == 'C')
-			{
-				free_map_copy(copy);
-				ft_error(game, "Collectible is not reachable!");
-			}
 			if (copy[y][x] == 'E')
-			{
-				free_map_copy(copy);
-				ft_error(game, "Exit is not reachable!");
-			}
+				copy[y][x] = '1';
 		}
+	}
+}
+
+static int	check_char_reachable(char **copy, t_game *game, char c)
+{
+	int	y;
+	int	x;
+
+	y = -1;
+	while (++y < game->map->y_size)
+	{
+		x = -1;
+		while (++x < game->map->x_size)
+		{
+			if (copy[y][x] == c)
+				return (0);
+		}
+	}
+	return (1);
+}
+
+void	check_collectibles(t_game *game)
+{
+	char	**copy;
+
+	copy = create_map_copy(game);
+	if (!copy)
+		ft_error(game, "Malloc failed");
+	set_exit_as_wall(copy, game);
+	ft_flood(copy, game->player_y, game->player_x, game);
+	if (!check_char_reachable(copy, game, 'C'))
+	{
+		free_map_copy(copy);
+		ft_error(game, "Collectible is not reachable!");
+	}
+	free_map_copy(copy);
+}
+
+void	check_exit(t_game *game)
+{
+	char	**copy;
+
+	copy = create_map_copy(game);
+	if (!copy)
+		ft_error(game, "Malloc failed");
+	ft_flood(copy, game->player_y, game->player_x, game);
+	if (!check_char_reachable(copy, game, 'E'))
+	{
+		free_map_copy(copy);
+		ft_error(game, "Exit is not reachable!");
 	}
 	free_map_copy(copy);
 }

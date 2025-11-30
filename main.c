@@ -25,8 +25,8 @@ int	main(int argc, char **argv)
 	get_map(argv[1], game);
 	check_rectangle(game, game->map->map);
 	check_walls(game);
-	check_map_reachable(game, -1, 0, -1);
 	map_check(game, -1, -1, "10CPE");
+	check_map_reachable(game, -1, 0, -1);
 	game->mlx = mlx_init();
 	game->win = mlx_new_window(game->mlx, game->map->x_size * 50,
 			game->map->y_size * 50, "so_long");
