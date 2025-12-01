@@ -8,14 +8,14 @@ This project focuses on event handling, memory management, file parsing, and ren
 ## 📌 **Table of Contents**
 
 1. [Introduction](#introduction)
-2. [Features](#features)
-3. [Project Structure](#project-structure)
-4. [Gameplay](#gameplay)
-5. [Map Rules](#map-rules)
-6. [Compilation & Usage](#compilation--usage)
-7. [Controls](#controls)
-8. [Error Handling](#error-handling)
-9. [Mandatory vs Bonus](#mandatory-vs-bonus)
+2. [Mandatory](#mandatory)
+3. [Features](#features)
+4. [Project Structure](#project-structure)
+5. [Gameplay](#gameplay)
+6. [Map Rules](#map-rules)
+7. [Compilation & Usage](#compilation--usage)
+8. [Controls](#controls)
+9. [Error Handling](#error-handling)
 
 ---
 
@@ -33,6 +33,16 @@ The project teaches:
 * File parsing and validation
 
 ---
+
+## ⭐ **Mandatory**
+
+### **Mandatory**
+
+* Basic rendering
+* Proper map parsing
+* Player movement
+* Movement counter
+* Exit only after collecting all `C`
 
 ## 🎮 **Features**
 
@@ -182,20 +192,3 @@ All errors print:
 Error
 <description>
 ```
-
-## ⭐ **Mandatory vs Bonus**
-
-### **Mandatory**
-
-* Basic rendering
-* Proper map parsing
-* Player movement
-* Movement counter
-* Exit only after collecting all `C`
-
-### **Bonus** (optional)
-
-* Enemies / patrols
-* Animation sprites
-* Multiple textures
-* Improved movement or effects
